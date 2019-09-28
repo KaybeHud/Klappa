@@ -1,0 +1,20 @@
+## Interface: 11302
+## Title: Klappa
+## Author: kaybe
+## Notes: Bar with popup buttons
+## Notes-deDE: Bar zum Ausklappen
+## DefaultState: enabled
+## LoadOnDemand: 0
+## SavedVariables: KlappaDB
+## Dependencies: Ace3
+
+embeds.xml
+
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+locale\enEN.lua
+locale\deDE.lua
+Klappa.lua
+KlappaBar.lua
+KlappaPopUp.lua
+KlappaHeaders.lua
+KlappaButtonFunctions.lua
