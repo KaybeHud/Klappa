@@ -9,6 +9,3 @@ In the main options you can hide the default wow mainbar, add or delete a bar an
 
 # What are button ids?
 In Wow you have 120 button ids. Nearly every action bar addon uses these ids internally, but you dont see them. If two buttons have the same id, they will to the same action if you click them. With Klappa you are free to assign to your buttons every id you want.
-
-# How to move the bar?
-In the menu, you have to unlock the bar you want to move. Then you have to drag the bar at the upper left corner of you main button.
