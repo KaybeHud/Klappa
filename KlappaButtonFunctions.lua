@@ -151,7 +151,7 @@ function Klappa2.PopUpButton.prototype:UpdateButton()
 		self:UpdateUsable();
 		self:UpdateCooldown();
 		self:UpdateFlash();
-		self.button:Show();
+		--self.button:Show();
 		--self.button:SetScript("OnUpdate", function(arg1,elapsed) self:OnUpdate(arg1,elapsed); end);
 		if not (self.isMain) then
 			self.button:Hide();

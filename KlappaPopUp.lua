@@ -191,7 +191,7 @@ function Klappa2.PopUpButton.prototype:ButtonProperties()
 
 	--Set scripts
 	button:SetScript("OnDragStart", function()  self:ButtonDrag(); end);
-	button:SetScript("PostClick", function()  print("postClick"); self:UpdateButton(); end);
+	button:SetScript("PostClick", function() self:UpdateButton(); end);
 	button:SetScript("OnEvent", function(arg1,event) self:OnEventFunc(event, arg1); end);
 	button:SetScript("OnUpdate", function(arg1,elapsed) self:OnUpdate(arg1,elapsed); end);
 	button:SetScript("OnReceiveDrag", function() self:ButtonDrop(); end );
