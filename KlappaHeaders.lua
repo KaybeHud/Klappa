@@ -111,8 +111,9 @@ function Klappa2.Header.prototype:SetAttributes()
 		local popups = newtable(self:GetChildren())
 		isUnder = false;
 			for i, button in ipairs(popups) do
-				if (button:IsUnderMouse()) then
+				if (button:IsUnderMouse(true)) then
 					isUnder = true;
+					return;
 				end
 			end
 			if not (isUnder) or (clicked) then

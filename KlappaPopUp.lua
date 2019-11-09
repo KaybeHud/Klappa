@@ -81,12 +81,20 @@ end
 
 function Klappa2.PopUpButton.prototype:SetAttributes()
 	SecureHandlerWrapScript(self.button,"OnEnter",self.parent.header, [[
-		control:Run(show)
+		control:Run(show);
 		--print("enter pop")
 		]]);
 	--SetUpAnimation(self.button, self.button:Hide(),nil,0.3,nil,nil)
 	SecureHandlerWrapScript(self.button,"OnLeave",self.parent.header, [[
-		control:Run(close);	--control:SetTimer(fadetime,"hide")
+		inHandler = self:IsUnderMouse(true)
+		
+		if not inHandler then
+			--header:SetAttribute("show", false)
+			control:Run(close);
+		end	    
+		--control:Run(close);	--control:SetTimer(fadetime,"hide");
+		
+		--print("leave pop")
 
 		]]);
 	SecureHandlerWrapScript(self.button, "OnClick", self.parent.header, [[clicked = true;
