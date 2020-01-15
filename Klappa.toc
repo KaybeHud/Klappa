@@ -1,4 +1,4 @@
-## Interface: 11302
+## Interface: 11303
 ## Title: Klappa
 ## Author: kaybe
 ## Notes: Bar with popup buttons
