@@ -95,6 +95,12 @@ function Klappa2.Bar.prototype:UpdateLayout()
 	for idx, buttonClass in pairs(self.root.headers) do
 		local x, y = 0, 0;
 		local padding = config[self.index].padding;
+		--Irgendwoher kam ein Fehler, dass "padding" ein table ist
+		--hier wird das geprüft und korrigiert
+		if (type(padding) == "table") then
+			padding = 1 
+			config[self.index].padding = 1
+		end
 		if (isVert) then
 			y = (-size-padding)*(buttonClass.index - 1);
 			rooty = rooty + size + padding;
@@ -257,12 +263,12 @@ function Klappa2.Bar.prototype:AddOptions()
 			desc = L["Set the padding of the buttons"],
 			order = 4,
 			step = 0.05,
-			min = 0.05,
+			min = 0.0,
 			max = 25.0,
 			isPercent = false,
 			get = function() return config[self.index].padding end,
-			set = function(v)
-				config[self.index].padding = v;
+			set = function(info,value)
+				config[self.index].padding = value;
 				self:UpdateLayout();
 			end
 		},
