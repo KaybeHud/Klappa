@@ -85,21 +85,45 @@ function Klappa2.PopUpButton.prototype:SetAttributes()
 		--print("enter pop")
 		]]);
 	--SetUpAnimation(self.button, self.button:Hide(),nil,0.3,nil,nil)
-	SecureHandlerWrapScript(self.button,"OnLeave",self.parent.header, [[
-		inHandler = self:IsUnderMouse(true)
+	-- SecureHandlerWrapScript(self.button,"OnLeave",self.parent.header, [[
+		-- inHandler = self:IsUnderMouse(true)
 		
-		if not inHandler then
+		-- if not inHandler then
+			-- --header:SetAttribute("show", false)
+			-- print("is under1")
+			-- queued = control:SetTimer(1.0,"hideTimer");
+			-- print("queued")
+			-- print(queued)
+			-- --control:Run(close);
+		-- end	    
+		-- --control:Run(close);	--control:SetTimer(fadetime,"hide");
+		
+		-- --print("leave pop")
+
+		-- ]]);
+		
+		self.button:SetAttribute("_ontimer", [[
+			print("in Timer_1")
+			control:Run(close)]]);
+	self.parent.header:SetAttribute("_ontimer", [[
+			print("in Timer_Header")
+			control:Run(close)]]);
+		
+	SecureHandlerWrapScript(self.button,"OnLeave",self.parent.header,[[return true, ""]], [[
+		inHeader =  control:IsUnderMouse(true)
+		
+		if not inHeader then
 			--header:SetAttribute("show", false)
 			control:Run(close);
 		end	    
-		--control:Run(close);	--control:SetTimer(fadetime,"hide");
-		
-		--print("leave pop")
 
-		]]);
+	]]);
+		
+		
 	SecureHandlerWrapScript(self.button, "OnClick", self.parent.header, [[clicked = true;
 										control:Run(close);
 										]]);
+	
 	--self.button:SetParent(self.parent.header)
 end
 
@@ -117,16 +141,16 @@ function Klappa2.PopUpButton.prototype:UpdateLayout(isVert, isRtDn, x, y)
 	local padding = config[self.barid].padding;
 	if (isVert and isRtDn) then
 		self.button:ClearAllPoints();
-		self.button:SetPoint("RIGHT", self.parent.header, "RIGHT", x , y);
+		self.button:SetPoint("TOPLEFT", self.parent.header, "TOPLEFT", x , y);
 	elseif (isVert and not isRtDn) then
 		self.button:ClearAllPoints();
-		self.button:SetPoint("LEFT", self.parent.header, "LEFT", x , y);
+		self.button:SetPoint("TOPRIGHT", self.parent.header, "TOPRIGHT", x , y);
 	elseif (not isVert and isRtDn) then
 		self.button:ClearAllPoints();
-		self.button:SetPoint("TOP", self.parent.header, "BOTTOM", x, y );
+		self.button:SetPoint("TOPLEFT", self.parent.header, "TOPLEFT", x, y );
 	elseif (not isVert and not isRtDn) then
 		self.button:ClearAllPoints();
-		self.button:SetPoint("BOTTOM", self.parent.header, "TOP", x, y );
+		self.button:SetPoint("BOTTOMLEFT", self.parent.header, "BOTTOMLEFT", x, y );
 	end
 
 	self.button:SetAlpha(config[self.barid].popupAlpha);

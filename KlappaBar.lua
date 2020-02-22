@@ -7,6 +7,12 @@ local config = {};
 local L = LibStub("AceLocale-3.0"):GetLocale("Klappa2")
 local LBF = LibStub("LibButtonFacade",true)
 
+-- Establish a reference to Masque.
+MSQ = LibStub("Masque", true)
+myGroup = {}
+
+
+
 Klappa2.Bar = {}
 Klappa2.Bar.prototype = {}
 Klappa2.Bar.metatable = {__index = Klappa2.Bar.prototype}
@@ -26,6 +32,7 @@ function Klappa2.Bar.prototype:init(index)
 		self:AddOptions();
 		self:CreateBar();
 		self.root.headers = {};
+		self.root.headersCount = 0;
 		if LBF then
 			self.root.LBFGroup = LBF:Group("Klappa2", L["Bar "]..self.index)
 			LBF:RegisterSkinCallback("Klappa2", self.SkinChanged, self);
@@ -37,11 +44,18 @@ function Klappa2.Bar.prototype:init(index)
 			self.root.headers[1] = Klappa2.Header:new(1, self);
 		else
 			for i, button in pairs (config[self.index].headers) do
+				self.root.headersCount = self.root.headersCount + 1
 				self.root.headers[i] = Klappa2.Header:new(i, self);
 			end
 		end
 		self:LoadPosition();
 		self:UpdateLayout();
+		if MSQ then
+			-- Retrieve a reference to a new or existing group and assign it
+			-- to a local variable.
+			myGroup = MSQ:Group("Klappa2", "Bar "..self.index)
+			print("Maske")
+		end
 end
 
 function Klappa2.Bar.prototype:CreateBar()
@@ -56,12 +70,58 @@ function Klappa2.Bar.prototype:CreateBar()
 	-------
 	--print("index")
 	--print(self.index)
-	--self.root:SetWidth(config[self.index].size);
-	--self.root:SetHeight(config[self.index].size);
+	self.root:SetWidth(config[self.index].size);
+	self.root:SetHeight(config[self.index].size);
 ---
+	self.root:SetBackdrop({
+		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+		tile = true,
+		tileSize = 1,
+		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+		edgeSize = 0,
+		insets = {left = 0, right = 0, top = 0, bottom = 0}
+	})
+	self.root:SetBackdropColor(1, 1, 1, 1)
+	self.root:SetBackdropBorderColor(0.5, 0.5, 0, 0)
+	
 	self.root.texture = self.root:CreateTexture();
 	self.root.texture:SetTexture(0,0,0.5,0);
 	self.root.texture:SetAllPoints(self.root);
+	
+	
+	local overlay = CreateFrame("Button", name .. "Overlay", bar)
+	overlay:EnableMouse(true)
+	overlay:RegisterForDrag("LeftButton")
+	overlay:RegisterForClicks("LeftButtonUp")
+	overlay:SetBackdrop({
+		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+		tile = true,
+		tileSize = 1,
+		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+		edgeSize = 0,
+		insets = {left = 0, right = 0, top = 0, bottom = 0}
+	})
+	overlay:SetBackdropColor(1, 1, 1, 0.5)
+	overlay:SetBackdropBorderColor(0.5, 0.5, 0, 0)
+	overlay.Text = overlay:CreateFontString(nil, "ARTWORK")
+	overlay.Text:SetFontObject(GameFontNormal)
+	overlay.Text:SetText("Bar:"..self.index)
+	overlay.Text:Show()
+	overlay.Text:ClearAllPoints()
+	overlay.Text:SetPoint("CENTER", overlay, "CENTER")
+
+	overlay:ClearAllPoints()
+	overlay:SetFrameLevel(self.root:GetFrameLevel() + 20)
+	overlay:SetWidth(self.root:GetWidth());
+	overlay:SetHeight(self.root:GetHeight());
+
+	local anchor = "TOPLEFT"
+	overlay:SetPoint(anchor, self.root, anchor,0,0)
+	overlay:Hide()
+	self.root.overlay = overlay
+	--self.root:Show()
+----------
+	
 end
 
 function Klappa2.Bar.prototype:SkinChanged(SkinID, Gloss, Backdrop, Group, Button, Colors)
@@ -75,7 +135,6 @@ end
 
 function Klappa2.Bar.prototype:UpdateLayout()
 	local rootx, rooty = 0, 0;
-	local overlapp = 20;
 	local isVert, isRtDn = false, false;
 	local size = config[self.index].size;
 	local orientation = config[self.index].orient;
@@ -92,6 +151,7 @@ function Klappa2.Bar.prototype:UpdateLayout()
 	else
 		rooty = size;
 	end
+	
 	for idx, buttonClass in pairs(self.root.headers) do
 		local x, y = 0, 0;
 		local padding = config[self.index].padding;
@@ -99,51 +159,47 @@ function Klappa2.Bar.prototype:UpdateLayout()
 		--hier wird das geprüft und korrigiert
 		if (type(padding) == "table") then
 			padding = 1 
-			config[self.index].padding = 1
+			config[self.index].padding = padding
 		end
 		if (isVert) then
 			y = (-size-padding)*(buttonClass.index - 1);
 			rooty = rooty + size + padding;
+			self.root:SetWidth(size)
+			self.root:SetHeight(size*self.root.headersCount)
+			
 		else
 			x = (size+padding)*(buttonClass.index - 1);
 			rootx = rootx + size + padding;
+			
+			self.root:SetWidth(size*self.root.headersCount)
+			self.root:SetHeight(size)
+			
 		end
 		buttonClass:UpdateLayout(x, y, isVert, isRtDn);
 	end
-	self.root:SetScale(config[self.index].buttonScale);
-	self.root:SetWidth(rootx + overlapp); --overlapp  um für links  und rechts noch einen Rand zu haben
-	self.root:SetHeight(rooty + overlapp); -- für den Rand oben und unten,
+	--self.root:SetScale(config[self.index].buttonScale);
+	self.root.overlay:SetWidth(self.root:GetWidth());
+	self.root.overlay:SetHeight(self.root:GetHeight());
 end
 
 function Klappa2.Bar.prototype:ToggleLock()
 	if (config[self.index].locked) then
-		-- self.root:EnableMouse(true);
-		-- self.root:SetScript("OnDragStart", function() self:StartDrag(); end);
-		-- self.root:SetScript("OnDragStop", function() self:StopDrag(); end);
-		-- self.root.texture:SetTexture(0, 0, 0.5, 1)
-		-- self.root:SetFrameLevel(4);
+		self.root.overlay:SetScript("OnDragStart", function() self:StartDrag(); end);
+		self.root.overlay:SetScript("OnDragStop", function() self:StopDrag(); end);
+		self.root.overlay:Show();
 		config[self.index].locked = false;
 		-- Show all popups
 		for idx, buttonClass in pairs(self.root.headers) do
 			buttonClass:ShowPops();
-			--print("unlock BAr, show overlay")
-			self.root.headers[idx].header.overlay:SetScript("OnDragStart", function() self:StartDrag(); end);
-			self.root.headers[idx].header.overlay:SetScript("OnDragStop", function() self:StopDrag(); end);
-			self.root.headers[idx].header.overlay:Show();
 		end
 	else
-		-- self.root:EnableMouse(false);
-		-- self.root:SetScript("OnDragStart", nil);
-		-- self.root:SetScript("OnDragStop", nil);
-		-- self.root.texture:SetTexture(0, 0, 0.5, 0);
-		-- self.root:SetAttribute("state", 0)
+		self.root.overlay:SetScript("OnDragStart", nil);
+		self.root.overlay:SetScript("OnDragStop", nil);
+		self.root.overlay:Hide()
+		
 		config[self.index].locked = true;
 		for idx, buttonClass in pairs(self.root.headers) do
-			--print("lock BAr, hide overlay")
 			buttonClass:HidePops();
-			self.root.headers[idx].header.overlay:Hide();
-			self.root.headers[idx].header.overlay:SetScript("OnDragStart", nil);
-			self.root.headers[idx].header.overlay:SetScript("OnDragStop", nil);
 		end
 	end
 end
@@ -191,6 +247,7 @@ function Klappa2.Bar.prototype:AddMainButton()
 	self.root.headers[idx] = Klappa2.Header:new(idx, self);
 	self.root.headers[idx]:AddPopup()
 	config[self.index].numberButtons = idx;
+	myGroup:AddButton(self.root.headers[idx])
 	self:UpdateLayout();
 end
 
