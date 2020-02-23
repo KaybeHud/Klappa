@@ -106,20 +106,10 @@ function Klappa2.Header.prototype:SetAttributes()
 
 	self.header:Execute( [[close = [=[
 		local popups = newtable(self:GetChildren())
-		isUnder = false;
-			--for i, button in ipairs(popups) do
-				--if (button:IsUnderMouse(true)) then
-				--	isUnder = true;
-				--	return;
-				--end
-			--end
-			if not (isUnder) or (clicked) then
-				for i, button in ipairs(popups) do
-					if not (i == 1) then
-						button:Hide()
-					end
+			for i, button in ipairs(popups) do
+				if not (i == 1) then
+					button:Hide()
 				end
-				clicked = false;
 			end
 		]=] ]])
 		

@@ -109,25 +109,22 @@ function Klappa2.PopUpButton.prototype:SetAttributes()
 
 		-- ]]);
 		
-		self.button:SetAttribute("_ontimer", [[
-			print("in Timer_1")
-			control:Run(close)]]);
-	self.parent.header:SetAttribute("_ontimer", [[
-			print("in Timer_Header")
-			control:Run(close)]]);
+		-- self.button:SetAttribute("_ontimer", [[
+			-- print("in Timer_1")
+			-- control:Run(close)]]);
+	-- self.parent.header:SetAttribute("_ontimer", [[
+			-- print("in Timer_Header")
+			-- control:Run(close)]]);
 		
 	SecureHandlerWrapScript(self.button,"OnLeave",self.parent.header,[[return true, ""]], [[
 		inHeader =  control:IsUnderMouse(true)
-		
 		if not inHeader then
-			--header:SetAttribute("show", false)
 			control:Run(close);
 		end	    
-
 	]]);
 		
 		
-	SecureHandlerWrapScript(self.button, "OnClick", self.parent.header, [[clicked = true;
+	SecureHandlerWrapScript(self.button, "OnClick", self.parent.header, [[
 										control:Run(close);
 										]]);
 	
