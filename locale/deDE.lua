@@ -58,3 +58,4 @@ if not L then return end
 	L["Change ID of popup button: "] = "ID \195\164ndern von Popupbutton: " 
 	L["Show all buttonids"] = "Zeige alle Button-IDs" 
 	L["Shows all buttons with their ids"] = "Zeige alle Buttons mit den entsprechenden IDs" 
+	L["no more popup button to delete"] = "Keine Popup-Button mehr zum L\195\182schen"

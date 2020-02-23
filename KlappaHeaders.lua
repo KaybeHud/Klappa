@@ -221,7 +221,7 @@ function Klappa2.Header.prototype:DelPopup()
 	
 	if(lastpopup <= 1) then 
 		self.header.popups = 1; 
-		print("no PopupButton") 
+		print(L["no more popup button to delete"]) 
 		return 
 	end;
 	self.header.popupButtons[lastpopup].button:Hide();

@@ -58,3 +58,4 @@ if not L then return end
 	L["Change ID of popup button: "] = true 
 	L["Show all buttonids"] = true 
 	L["Shows all buttons with their ids"] = true
+	L["no more popup button to delete"] = true
