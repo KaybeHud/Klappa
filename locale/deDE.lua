@@ -5,7 +5,7 @@ if not L then return end
 	L["Hides the default mainbar"] = "Versteckt die Standard Buttonleiste"
 	L["Button Lock"] = "Kn\195\182pfe sperren"
 	L["Lock the buttons"] = "Die Kn\195\182pfe sperren"
-	L["Lock the frame"] = "Fenster sperren"
+	L["Lock the bar"] = "Leiste sperren"
 	L["Scale buttons"] = "Kn\195\182pfe skalieren"
 	L["Scale the buttons"] = "Buttons skalieren"
 	L["Invert popup direction"] = "Popuprichtung invertieren"

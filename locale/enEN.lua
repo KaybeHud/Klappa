@@ -5,7 +5,7 @@ if not L then return end
 	L["Hides the default mainbar"] = true 
 	L["Button Lock"] = true 
 	L["Lock the buttons"] = true 
-	L["Lock the frame"] = true 
+	L["Lock the bar"] = true 
 	L["Scale buttons"] = true 
 	L["Scale the buttons"] = true 
 	L["Invert popup direction"] = true 

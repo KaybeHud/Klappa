@@ -7,6 +7,10 @@ local config = {};
 local L = LibStub("AceLocale-3.0"):GetLocale("Klappa2")
 local LBF = LibStub("LibButtonFacade",true)
 
+-- Establish a reference to Masque.
+MSQ = LibStub("Masque", true)
+myGroup = {}
+
 Klappa2.PopUpButton = {}
 Klappa2.PopUpButton.prototype ={}
 Klappa2.PopUpButton.metatable ={__index = Klappa2.PopUpButton.prototype}
@@ -37,16 +41,23 @@ function Klappa2.PopUpButton.prototype:init(parent, idx, id, bar)
 
 	config = Klappa2.config.bars;
 	self.parent = parent;
+	if MSQ then
+			-- Retrieve a reference to a new or existing group and assign it
+			-- to a local variable.
+			myGroup = MSQ:Group("Klappa2",nil, true)
+	end
 	if not (parent.header.popupButtons[self.index] == nil) then
 		self.button = self.parent.header.popupButtons[self.index].button
 		self.button:SetAttribute("deleted", false);
 		--self.button:SetParent(self.parent)
 		self.button:Show()
+		myGroup:AddButton(self.button)
 	else
 		self:CreatePopupButton();
 	end
 	self:LoadSpell();
 	self:AddOptions()
+	
 end
 
 
@@ -77,6 +88,9 @@ function Klappa2.PopUpButton.prototype:CreatePopupButton()
 		self.bar.root.LBFGroup:AddButton(self.button, self.button.LBFButtonData)
 	end
 	self.button:Show();
+	if MSQ then
+		myGroup:AddButton(self.button)
+	end
 end
 
 function Klappa2.PopUpButton.prototype:SetAttributes()

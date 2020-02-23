@@ -43,8 +43,8 @@ function Klappa2.Header.prototype:init(idx, bar)
 		self.header.popupButtons[1] = Klappa2.PopUpButton:new(self, 1, 1, bar);
 	end
 
-	self.header.overlay:SetWidth(config[self.barid].size * self.header.popups);
-	self.header.overlay:SetHeight(config[self.barid].size);
+	--self.header.overlay:SetWidth(config[self.barid].size * self.header.popups);
+	--self.header.overlay:SetHeight(config[self.barid].size);
 	--Klappa2:Debug("Header: "..self.header:GetName().." created");
 end
 
@@ -69,45 +69,45 @@ function Klappa2.Header.prototype:CreateHeader()
 	-- self.header:SetBackdropBorderColor(0.5, 0.5, 0, 0)
 	
 	
-	-- self.header.texture = self.header:CreateTexture();
-	-- self.header.texture:SetTexture(0,0.5,0.5,0.5);
-	-- self.header.texture:SetAllPoints(self.header);
+	self.header.texture = self.header:CreateTexture();
+	self.header.texture:SetTexture(0,0.5,0.5,0.5);
+	self.header.texture:SetAllPoints(self.header);
 	
-	--self.header:Show()
+	self.header:Show()
 	
 	
 	
 	------------
-	local overlay = CreateFrame("Button", name .. "Overlay", bar)
-	overlay:EnableMouse(true)
-	overlay:RegisterForDrag("LeftButton")
-	overlay:RegisterForClicks("LeftButtonUp")
-	overlay:SetBackdrop({
-		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-		tile = true,
-		tileSize = 1,
-		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-		edgeSize = 0,
-		insets = {left = 0, right = 0, top = 0, bottom = 0}
-	})
-	overlay:SetBackdropColor(0, 1, 1, 0.5)
-	overlay:SetBackdropBorderColor(0.5, 0.5, 0, 0)
-	overlay.Text = overlay:CreateFontString(nil, "ARTWORK")
-	overlay.Text:SetFontObject(GameFontNormal)
-	overlay.Text:SetText("Main:"..self.barid)
-	overlay.Text:Show()
-	overlay.Text:ClearAllPoints()
-	overlay.Text:SetPoint("CENTER", overlay, "CENTER")
+	-- local overlay = CreateFrame("Button", name .. "Overlay", bar)
+	-- overlay:EnableMouse(true)
+	-- overlay:RegisterForDrag("LeftButton")
+	-- overlay:RegisterForClicks("LeftButtonUp")
+	-- overlay:SetBackdrop({
+		-- bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+		-- tile = true,
+		-- tileSize = 1,
+		-- edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+		-- edgeSize = 0,
+		-- insets = {left = 0, right = 0, top = 0, bottom = 0}
+	-- })
+	-- overlay:SetBackdropColor(0, 1, 1, 0.5)
+	-- overlay:SetBackdropBorderColor(0.5, 0.5, 0, 0)
+	-- overlay.Text = overlay:CreateFontString(nil, "ARTWORK")
+	-- overlay.Text:SetFontObject(GameFontNormal)
+	-- overlay.Text:SetText("Main:"..self.barid)
+	-- overlay.Text:Show()
+	-- overlay.Text:ClearAllPoints()
+	-- overlay.Text:SetPoint("CENTER", overlay, "CENTER")
 
 	--overlay:ClearAllPoints()
-	overlay:SetFrameLevel(self.header:GetFrameLevel() + 20)
-	overlay:SetWidth(self.header:GetWidth());
-	overlay:SetHeight(self.header:GetHeight());
+	-- overlay:SetFrameLevel(self.header:GetFrameLevel() + 20)
+	-- overlay:SetWidth(self.header:GetWidth());
+	-- overlay:SetHeight(self.header:GetHeight());
 
-	local anchor = "CENTER"
-	overlay:SetPoint(anchor, self.header, anchor)
-	overlay:Hide()
-	self.header.overlay = overlay
+	-- local anchor = "CENTER"
+	-- overlay:SetPoint(anchor, self.header, anchor)
+	-- overlay:Hide()
+	-- self.header.overlay = overlay
 ----------
 	self.header.class = self;
 	self.header.index = self.index;
@@ -147,15 +147,6 @@ function Klappa2.Header.prototype:SetAttributes()
 			end
 		]=] ]])
 		
-	-- self.header:Execute([[ clicked = false;
-					-- fadetime = 1.0;
-				-- ]])
-
-	-- self.header:SetAttribute("_ontimer",[[
-		-- print("timer event:")
-		-- control:Run(close);
-		-- ]])
-		
 	
 	self.header:SetAttribute("_onleave",[[
 		return
@@ -183,32 +174,29 @@ function Klappa2.Header.prototype:UpdateLayout(x, y, isVert, isRtDn)
 			x = (size+padding)* index - size;
 			 
 			self.header:SetPoint("TOPLEFT", self.bar.root, "TOPLEFT", headerX, headerY);
-			self.header:SetWidth(config[self.barid].size * (self.header.popups));
+			self.header:SetWidth(config[self.barid].size * (self.header.popups)+ (padding * self.header.popups));
 			self.header:SetHeight(config[self.barid].size);
 		elseif (isVert and not isRtDn) then
 			x = -((size+padding)* index - size)
 			
 			self.header:SetPoint("TOPRIGHT", self.bar.root, "TOPRIGHT", -headerX, headerY);
-			self.header:SetWidth(config[self.barid].size * (self.header.popups));
+			self.header:SetWidth(config[self.barid].size * (self.header.popups) + (padding * self.header.popups));
 			self.header:SetHeight(config[self.barid].size);
 		elseif (not isVert and isRtDn) then
 			y = (-size-padding)* index + size
 			
 			self.header:SetPoint("TOPLEFT", self.bar.root, "TOPLEFT", headerX, headerY);
 			self.header:SetWidth(config[self.barid].size);
-			self.header:SetHeight(config[self.barid].size * self.header.popups);
+			self.header:SetHeight(config[self.barid].size * self.header.popups + (padding * self.header.popups));
 		elseif (not isVert and not isRtDn) then
 			y = -((-size-padding)* index + size)
 			
 			self.header:SetPoint("BOTTOMLEFT", self.bar.root, "BOTTOMLEFT", headerX, headerY);
 			self.header:SetWidth(config[self.barid].size);
-			self.header:SetHeight(config[self.barid].size * self.header.popups);
+			self.header:SetHeight(config[self.barid].size * self.header.popups + (padding * self.header.popups));
 		end
 		popButtonClass:UpdateLayout(isVert, isRtDn, x, y);
 	end
-	--self.header.overlay:ClearAllPoints()
-	self.header.overlay:SetWidth(self.header:GetWidth()+5)
-	self.header.overlay:SetHeight(self.header:GetHeight()+5)
 	self.header:SetAlpha(config[self.barid].alpha);
 end
 

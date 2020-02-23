@@ -6,7 +6,7 @@
 ## DefaultState: enabled
 ## LoadOnDemand: 0
 ## SavedVariables: KlappaDB
-## Dependencies: Ace3, Masque
+## Dependencies: Ace3
 
 embeds.xml
 
