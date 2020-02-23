@@ -10,6 +10,10 @@ Klappa2.Header = {}
 Klappa2.Header.prototype = {}
 Klappa2.Header.metatable = {__index= Klappa2.Header.prototype}
 
+-- Establish a reference to Masque.
+MSQ = LibStub("Masque", true)
+myGroup = {}
+
 function Klappa2.Header:new(idx, bar)
 	local instance = setmetatable({}, self.metatable)
 	instance:init(idx, bar)
@@ -30,22 +34,26 @@ function Klappa2.Header.prototype:init(idx, bar)
 	self.popupButtons = {};
 	self.header.popupButtons = self.popupButtons;
 	self.header.popups = 0;
+	if MSQ then
+			-- Retrieve a reference to a new or existing group and assign it
+			-- to a local variable.
+			myGroup = MSQ:Group("Klappa2",nil, true)
+	end
 
 	if(config[self.barid].headers[idx].popups ~= nil) then
 		for i, popup in pairs (config[self.barid].headers[idx].popups) do
 			self.header.popups = self.header.popups + 1;
 			self.header.popupButtons[i] = Klappa2.PopUpButton:new(self, i, popup.id, bar);
+			self:AddButtonToMasque(self.header.popupButtons[i].button)
 		end
 	else
 		config[self.barid].headers[idx] = {};
 		config[self.barid].headers[idx].popups = {};
 		self.header.popups = self.header.popups + 1;
 		self.header.popupButtons[1] = Klappa2.PopUpButton:new(self, 1, 1, bar);
+		self:AddButtonToMasque(self.header.popupButtons[1].button)
 	end
 
-	--self.header.overlay:SetWidth(config[self.barid].size * self.header.popups);
-	--self.header.overlay:SetHeight(config[self.barid].size);
-	--Klappa2:Debug("Header: "..self.header:GetName().." created");
 end
 
 function Klappa2.Header.prototype:CreateHeader()
@@ -57,6 +65,8 @@ function Klappa2.Header.prototype:CreateHeader()
 	self.header:SetWidth(config[self.barid].size);
 	self.header:SetHeight(config[self.barid].size);
 	
+----	
+	--Um den Header zu sehen:
 	-- self.header:SetBackdrop({
 		-- bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
 		-- tile = true,
@@ -67,7 +77,7 @@ function Klappa2.Header.prototype:CreateHeader()
 	-- })
 	-- self.header:SetBackdropColor(1, 1, 0, 1)
 	-- self.header:SetBackdropBorderColor(0.5, 0.5, 0, 0)
-	
+----	
 	
 	self.header.texture = self.header:CreateTexture();
 	self.header.texture:SetTexture(0,0.5,0.5,0.5);
@@ -75,40 +85,6 @@ function Klappa2.Header.prototype:CreateHeader()
 	
 	self.header:Show()
 	
-	
-	
-	------------
-	-- local overlay = CreateFrame("Button", name .. "Overlay", bar)
-	-- overlay:EnableMouse(true)
-	-- overlay:RegisterForDrag("LeftButton")
-	-- overlay:RegisterForClicks("LeftButtonUp")
-	-- overlay:SetBackdrop({
-		-- bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-		-- tile = true,
-		-- tileSize = 1,
-		-- edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-		-- edgeSize = 0,
-		-- insets = {left = 0, right = 0, top = 0, bottom = 0}
-	-- })
-	-- overlay:SetBackdropColor(0, 1, 1, 0.5)
-	-- overlay:SetBackdropBorderColor(0.5, 0.5, 0, 0)
-	-- overlay.Text = overlay:CreateFontString(nil, "ARTWORK")
-	-- overlay.Text:SetFontObject(GameFontNormal)
-	-- overlay.Text:SetText("Main:"..self.barid)
-	-- overlay.Text:Show()
-	-- overlay.Text:ClearAllPoints()
-	-- overlay.Text:SetPoint("CENTER", overlay, "CENTER")
-
-	--overlay:ClearAllPoints()
-	-- overlay:SetFrameLevel(self.header:GetFrameLevel() + 20)
-	-- overlay:SetWidth(self.header:GetWidth());
-	-- overlay:SetHeight(self.header:GetHeight());
-
-	-- local anchor = "CENTER"
-	-- overlay:SetPoint(anchor, self.header, anchor)
-	-- overlay:Hide()
-	-- self.header.overlay = overlay
-----------
 	self.header.class = self;
 	self.header.index = self.index;
 
@@ -156,7 +132,6 @@ end
 
 function Klappa2.Header.prototype:UpdateLayout(x, y, isVert, isRtDn)
 	self.header:ClearAllPoints();
-	--local border = 10			-- Rahmen um mit der Maus verschieben zu können
 	local headerX = x
 	local headerY = y
 	local scale = config[self.barid].headerScale;
@@ -247,20 +222,43 @@ function Klappa2.Header.prototype:AddPopup()
 	self.header.popupButtons[self.header.popups] = Klappa2.PopUpButton:new(self, self.header.popups, popupid, self.bar);
 	config[self.barid].headers[self.index].popups[self.header.popups] = {};
 	config[self.barid].headers[self.index].popups[self.header.popups].id = popupid;
-	myGroup:AddButton(self.header.popupButtons[self.header.popups])
-	self.bar:UpdateLayout();
+	self.bar:UpdateLayout(self.header.popupButtons[self.header.popups]);
+	self:AddButtonToMasque(self.header.popupButtons[self.header.popups].button)
 end
 
 function Klappa2.Header.prototype:DelPopup()
 	local lastpopup = self.header.popups;
-	--Klappa2:Debug(lastpopup)
-	if(lastpopup <= 1) then self.header.popups = 1; print("kein button mehr") return end;
+	
+	if(lastpopup <= 1) then 
+		self.header.popups = 1; 
+		print("no PopupButton") 
+		return 
+	end;
 	self.header.popupButtons[lastpopup].button:Hide();
 	self.header.popupButtons[lastpopup].button:SetAttribute("deleted", true);
-
+	self:RemoveButtonFromMasque(self.header.popupButtons[lastpopup].button)
 	config[self.barid].headers[self.index].popups[lastpopup] = nil;
 	self.header.popups = lastpopup - 1;
+	self.header.popupButtons[lastpopup].button = nil
+	self.header.popupButtons[lastpopup] = nil
+	Klappa2.options.args["Bar"..self.barid].args["Header"..self.index].args["PopUpButton"..lastpopup] = nil;
+	
 	self.bar:UpdateLayout();
+end
 
-	Klappa2.options.args["Bar"..self.barid].args["Header"..self.index].args[lastpopup] = nil;
+
+function Klappa2.Header.prototype:AddButtonToMasque(button)
+	if MSQ then
+		if myGroup then
+			myGroup:AddButton(button)		
+		end
+	end
+end
+
+function Klappa2.Header.prototype:RemoveButtonFromMasque(button)
+	if MSQ then
+		if myGroup then
+			myGroup:RemoveButton(button)		
+		end
+	end
 end

@@ -57,12 +57,11 @@ function Klappa2.Bar.prototype:CreateBar()
 	self.root:SetMovable(true);
 	self.root:SetClampedToScreen(true);
 	self.root.name = name;
-	-------
-	--print("index")
-	--print(self.index)
+	
 	self.root:SetWidth(config[self.index].size);
 	self.root:SetHeight(config[self.index].size);
 ---
+--Um die Bar zu sehen:
 	-- self.root:SetBackdrop({
 		-- bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
 		-- tile = true,
@@ -78,10 +77,11 @@ function Klappa2.Bar.prototype:CreateBar()
 	self.root.texture:SetTexture(0,0,0.5,0);
 	self.root.texture:SetAllPoints(self.root);
 	
-	
+	--Rahmen um die Bar zum verschieben
 	self.overlay = CreateFrame("Button", name .. "Overlay", self.root)
 	self.overlay:SetPoint("CENTER", self.root, "CENTER")
 	self.overlay:SetFrameLevel(self.root:GetFrameLevel()+20)
+	--10Pkte größer als die Leiste
 	self.overlay:SetWidth(self.root:GetWidth()+10);
 	self.overlay:SetHeight(self.root:GetHeight()+10);
 	self.overlay:EnableMouse(true)
@@ -103,11 +103,8 @@ function Klappa2.Bar.prototype:CreateBar()
 	self.overlay.Text:Show()
 	self.overlay.Text:ClearAllPoints()
 	self.overlay.Text:SetPoint("CENTER", self.overlay, "CENTER")
-
 	self.overlay:Hide()
-	--self.root.overlay = overlay
 	--self.root:Show()
-----------
 	
 end
 
@@ -165,8 +162,8 @@ function Klappa2.Bar.prototype:UpdateLayout()
 		buttonClass:UpdateLayout(x, y, isVert, isRtDn);
 	end
 	
-	self.overlay:SetWidth(self.root:GetWidth()+20);
-	self.overlay:SetHeight(self.root:GetHeight()+20);
+	self.overlay:SetWidth(self.root:GetWidth()+10);
+	self.overlay:SetHeight(self.root:GetHeight()+10);
 end
 
 function Klappa2.Bar.prototype:ToggleLock()
@@ -225,10 +222,8 @@ end
 
 function Klappa2.Bar.prototype:AddMainButton()
 	idx = config[self.index].numberButtons + 1;
-	--local nextid = self.root.headers[idx-1].header.popups + 1;
-	--if(nextid >= 120) then nextid = 120; end
+	
 	config[self.index].headers[idx] = {};
-	--config[self.index].headers[idx].id = nextid or config[self.index].id;
 	config[self.index].headers[idx].popups = {};
 
 	self.root.headers[idx] = Klappa2.Header:new(idx, self);

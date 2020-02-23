@@ -7,9 +7,7 @@ local config = {};
 local L = LibStub("AceLocale-3.0"):GetLocale("Klappa2")
 local LBF = LibStub("LibButtonFacade",true)
 
--- Establish a reference to Masque.
-MSQ = LibStub("Masque", true)
-myGroup = {}
+
 
 Klappa2.PopUpButton = {}
 Klappa2.PopUpButton.prototype ={}
@@ -41,17 +39,13 @@ function Klappa2.PopUpButton.prototype:init(parent, idx, id, bar)
 
 	config = Klappa2.config.bars;
 	self.parent = parent;
-	if MSQ then
-			-- Retrieve a reference to a new or existing group and assign it
-			-- to a local variable.
-			myGroup = MSQ:Group("Klappa2",nil, true)
-	end
+	
 	if not (parent.header.popupButtons[self.index] == nil) then
 		self.button = self.parent.header.popupButtons[self.index].button
 		self.button:SetAttribute("deleted", false);
 		--self.button:SetParent(self.parent)
 		self.button:Show()
-		myGroup:AddButton(self.button)
+		--self:AddButtonToMasque(self.button)
 	else
 		self:CreatePopupButton();
 	end
@@ -87,10 +81,9 @@ function Klappa2.PopUpButton.prototype:CreatePopupButton()
 		}
 		self.bar.root.LBFGroup:AddButton(self.button, self.button.LBFButtonData)
 	end
+	--self:AddButtonToMasque(self.button)
 	self.button:Show();
-	if MSQ then
-		myGroup:AddButton(self.button)
-	end
+	
 end
 
 function Klappa2.PopUpButton.prototype:SetAttributes()
@@ -148,9 +141,23 @@ function Klappa2.PopUpButton.prototype:ChangeID(id)
 	config[self.barid].headers[self.parent.index].popups[self.index].id = id;
 end
 
+function Klappa2.PopUpButton.prototype:AddButtonToMasque(button)
+	if MSQ then
+		if myGroup then
+			myGroup:AddButton(button)		
+		end
+	end
+end
+
+function Klappa2.PopUpButton.prototype:RemoveButtonFromMasque(button)
+	if MSQ then
+		if myGroup then
+			myGroup:RemovedButton(button)		
+		end
+	end
+end
+
 function Klappa2.PopUpButton.prototype:UpdateLayout(isVert, isRtDn, x, y)
-	--Klappa2:Debug("Position of "..self.button:GetName());
-	--Klappa2:Debug("x: "..x.."  __  Y: "..y);
 
 	local padding = config[self.barid].padding;
 	if (isVert and isRtDn) then
