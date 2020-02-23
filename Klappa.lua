@@ -233,23 +233,38 @@ end
 function Klappa2:CreateShowIDs()
 	local buttonsize = 35
 	Klappa2.showIDs = CreateFrame("Frame","ShowIDs", UIParent);
-	Klappa2.showIDs.tex = Klappa2.showIDs:CreateTexture();
-	Klappa2.showIDs.tex:SetTexture(0,0,0.5,0.5);
-	Klappa2.showIDs.tex:SetAllPoints(Klappa2.showIDs);
-	Klappa2.showIDs.tex2 = Klappa2.showIDs:CreateTexture();
-	Klappa2.showIDs.tex2:SetTexture(0,0,0,0.5);
-	Klappa2.showIDs.tex2:SetPoint("TOPLEFT");
-	Klappa2.showIDs.tex2:SetHeight(20);
-	Klappa2.showIDs.tex2:SetWidth(12*buttonsize);
-	Klappa2.showIDs:EnableMouse(true);
 	Klappa2.showIDs:SetMovable(true);
-	Klappa2.showIDs:RegisterForDrag("LeftButton");
+	Klappa2.showIDs:SetClampedToScreen(true);
 	Klappa2.showIDs:SetPoint("CENTER",0,0);
 	Klappa2.showIDs:SetHeight((10*buttonsize)+20);
 	Klappa2.showIDs:SetWidth(12*buttonsize);
-	Klappa2.showIDs:SetScript("OnDragStart", function() self:StartDrag(); end);
-	Klappa2.showIDs:SetScript("OnDragStop", function() self:StopDrag(); end);
-	Klappa2.showIDs:SetClampedToScreen(true);
+	
+	--Rahmen um das Fenster zu verschieben
+	Klappa2.handle = CreateFrame("Button", "ShowIdHandle", Klappa2.showIDs)
+	Klappa2.handle:SetPoint("TOPLEFT", Klappa2.showIDs, "TOPLEFT")
+	Klappa2.handle:SetFrameLevel(Klappa2.showIDs:GetFrameLevel()+20)
+	Klappa2.handle:SetWidth(12*buttonsize);
+	Klappa2.handle:SetHeight(20);
+	Klappa2.handle:EnableMouse(true)
+	Klappa2.handle:RegisterForDrag("LeftButton")
+	Klappa2.handle:SetBackdrop({
+		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+		tile = true,
+		tileSize = 1,
+		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+		edgeSize = 0,
+		insets = {left = 0, right = 0, top = 0, bottom = 0}
+	})
+	Klappa2.handle:SetBackdropColor(0, 1, 1, 0.5)
+	Klappa2.handle:SetBackdropBorderColor(0.5, 0.5, 0, 0)
+	Klappa2.handle.text = Klappa2.handle:CreateFontString();
+	Klappa2.handle.text:SetFont("Fonts\\FRIZQT__.TTF",15);
+	Klappa2.handle.text:SetText("Button IDs");
+	Klappa2.handle.text:SetAllPoints(Klappa2.handle);
+	
+	Klappa2.handle:SetScript("OnDragStart", function() self:StartDrag(); end);
+	Klappa2.handle:SetScript("OnDragStop", function() self:StopDrag(); end);
+	
 	Klappa2.showIDs:Hide()
 	Klappa2.showIDs.show = false;
 
