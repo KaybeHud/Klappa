@@ -3,7 +3,7 @@ Klappa2 = LibStub("AceAddon-3.0"):NewAddon("Klappa2", "AceConsole-3.0")  --"LibF
 local _G = getfenv(0)
 local L = LibStub("AceLocale-3.0"):GetLocale("Klappa2")
 
---LDB
+-- LDB
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("Klappa", {
     type = "launcher",
     icon = "Interface\\Icons\\INV_Weapon_ShortBlade_17",
@@ -53,18 +53,18 @@ function Klappa2:OnFuBarClick(button)
 end
 --------------------------------
 
-local defaults = 
+local defaults =
 {
-	char = 
+	char =
 	{
 	bars = {
 		{
 			headers = {
 				{
-					popups = 
+					popups =
 					{
 						{
-							["id"] = 1,		
+							["id"] = 1,
 						}, -- [1]
 					},
 				},
@@ -81,9 +81,9 @@ local defaults =
 			size = 35,
 			tooltip = true,
 			numberButtons = 1,
-		},	
+		},
 	},
-	
+
 	hideUI = false,
 	numberBars = 1
 	}
@@ -100,17 +100,17 @@ function Klappa2:InitOptions()
 		name = "Klappa",
 		desc = "Action bars with popup buttons",
 		icon = "Interface\\Icons\\INV_Weapon_ShortBlade_17",
-		type="group", 	
-		args = { 
+		type="group",
+		args = {
 			showUI = {
-				name = L["Hide mainbar"], 
+				name = L["Hide mainbar"],
 				desc = L["Hides the default mainbar"],
 				type = "toggle",
 				order = 1,
 				get = function() return Klappa2.config.hideUI end,
 				set = function(info,value) Klappa2:SetDefaultUIElements(value); Klappa2.config.hideUI = value; end,
 			},
-				
+
 			add = {
 				name = L["Add Bar"],
 				desc = L["Add a new bar"],
@@ -150,13 +150,13 @@ function Klappa2:OnEnable()
 	self:CreateShowIDs()
 	self:SetDefaultUIElements(Klappa2.config.hideUI)
 	--altes self:SetConfigTable(self.options);
-	
+
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("Klappa", self.options)
 	self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Klappa", "Klappa")
 	self.optionsFrameGui = LibStub("AceConfigDialog-3.0"):Open("Klappa")
 	self:RegisterChatCommand("kl", "ChatCommand")
 	self:RegisterChatCommand("klappa", "ChatCommand")
-	
+
 end
 
 function Klappa2:ChatCommand(input)
@@ -183,7 +183,7 @@ end
 
 function Klappa2:CreateRoot()
 	self.bars = {};
-	
+
 	if (Klappa2.config.bars == nil) then
 		self.bars[1] = Klappa2.Bar:new(1);
 	else
@@ -208,7 +208,7 @@ function Klappa2:DeleteBar()
 	for i, mainbutton in pairs (self.bars[idx].root.headers) do
 		self.bars[idx]:DelMainButton();
 	end
-	
+
 	Klappa2.config.bars[idx] = nil;
 	Klappa2.options.args["Bar"..idx] = nil;
 	Klappa2.config.numberBars = idx-1;
@@ -252,7 +252,7 @@ function Klappa2:CreateShowIDs()
 	Klappa2.showIDs:SetPoint("CENTER",0,0);
 	Klappa2.showIDs:SetHeight((10*buttonsize)+20);
 	Klappa2.showIDs:SetWidth(12*buttonsize);
-	
+
 	--Rahmen um das Fenster zu verschieben
 	Klappa2.handle = CreateFrame("Button", "ShowIdHandle", Klappa2.showIDs)
 	Klappa2.handle:SetPoint("TOPLEFT", Klappa2.showIDs, "TOPLEFT")
@@ -275,10 +275,10 @@ function Klappa2:CreateShowIDs()
 	Klappa2.handle.text:SetFont("Fonts\\FRIZQT__.TTF",15);
 	Klappa2.handle.text:SetText("Button IDs");
 	Klappa2.handle.text:SetAllPoints(Klappa2.handle);
-	
+
 	Klappa2.handle:SetScript("OnDragStart", function() self:StartDrag(); end);
 	Klappa2.handle:SetScript("OnDragStop", function() self:StopDrag(); end);
-	
+
 	Klappa2.showIDs:Hide()
 	Klappa2.showIDs.show = false;
 
@@ -300,7 +300,7 @@ function Klappa2:CreateShowIDs()
 		Klappa2.showIDsTex[i].id = i + 1;
 		Klappa2.showIDsTex[i]:HookScript("OnEnter", function(self, motion) Klappa2:ShowTooltip(self, self.id); end);
 		Klappa2.showIDsTex[i]:HookScript("OnLeave", function(self, motion) Klappa2:HideTooltip(self); end);
-		
+
 		i=i+1;
 	end
 	Klappa2.showIDs:SetScript("OnEvent", function(self, event, id) Klappa2:Update(id); end);
