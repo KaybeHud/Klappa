@@ -3,6 +3,7 @@ local _G = getfenv(0);
 
 local Klappa2 = Klappa2;
 local LBF = LibStub("LibButtonFacade",true)
+local LibSpellCount = LibStub("LibClassicSpellActionCount-1.0", true)
 
 function Klappa2.PopUpButton.prototype:LoadSpell()
 	self.button:SetAttribute("action", self.button.id);
@@ -73,7 +74,11 @@ function Klappa2.PopUpButton.prototype:UpdateCount()
 	local text = self.button.count;
 	local action = self.button.id;
 	if (IsConsumableAction(action) or IsStackableAction(action)) then
-		text:SetText(GetActionCount(action));
+		if (LibSpellCount) then
+			text:SetText(LibSpellCount:GetActionCount(action));
+		else
+			text:SetText(GetActionCount(action));
+		end
 	else
 		text:SetText("");
 	end
@@ -99,13 +104,6 @@ function Klappa2.PopUpButton.prototype:UpdateState()
 	local action = self.button.id
 	local isChecked = IsCurrentAction(action) or IsAutoRepeatAction(action)
 	self.button:SetChecked(isChecked)
-	--print("isChecked::");
-	--print(isChecked)
-	-- if ( IsCurrentAction(self.button.id) or IsAutoRepeatAction(self.button.id) ) then
-		-- self.button:SetChecked(1)
-	-- else
-		-- self.button:SetChecked(0)
-	-- end
 end
 
 function Klappa2.PopUpButton.prototype:UpdateUsable()
@@ -142,7 +140,6 @@ function Klappa2.PopUpButton.prototype:UpdateButton()
 	--self:UpdateHotkeys();
 	self:UpdateCount();
 	if(HasAction(self.button.id) ) then
-	--print("UpdateButton:HasAction")
 		self:RegisterButtonEvents();
 		--if (not self.button:GetAttribute("statehidden") or not self.isPopup ) then
 		--	self.button:Show();
@@ -151,13 +148,11 @@ function Klappa2.PopUpButton.prototype:UpdateButton()
 		self:UpdateUsable();
 		self:UpdateCooldown();
 		self:UpdateFlash();
-		--self.button:Show();
-		--self.button:SetScript("OnUpdate", function(arg1,elapsed) self:OnUpdate(arg1,elapsed); end);
-		if not (self.isMain) then
-			self.button:Hide();
+		if not (self.isMain) and not InCombatLockdown() then
+			self.button:Hide()
+			--self.button:Execute([[self:Run(hide)]])
 		end
 	else
-	--print("UpdateButton:else")
 		self.button:SetScript("OnUpdate", nil);
 		self:UnregisterButtonEvents();
 		if( self.showgrid == 0) then
@@ -166,7 +161,8 @@ function Klappa2.PopUpButton.prototype:UpdateButton()
 				self.button.overlay:Hide()
 			end
 			if not (self.isMain) then
-				self.button:Hide();
+				--self.button:Hide();
+				self.button:Execute([[self:Run(hide)]])
 			end
 		else
 			self.button.normalTexture:Show()

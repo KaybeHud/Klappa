@@ -1,13 +1,13 @@
 ## Interface: 11303
 ## Title: Klappa
 ## Author: kaybe
-## Notes: Bar with popup buttons
+## Notes: Actionbar with popup buttons
 ## Notes-deDE: Bar zum Ausklappen
 ## DefaultState: enabled
 ## LoadOnDemand: 0
 ## SavedVariables: KlappaDB
 ## Dependencies: Ace3
-## OptionalDeps: Masque
+## OptionalDeps: Masque, LibClassicSpellActionCount-1.0
 
 embeds.xml
 
