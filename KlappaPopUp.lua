@@ -69,9 +69,10 @@ function Klappa2.PopUpButton.prototype:CreatePopupButton()
 	self.button.index = self.index;
 	self.button:SetScript("OnEnter", function() self:ShowTooltip(self.button); end);
 	self.button:SetScript("OnLeave", function() self:HideTooltip(self.button); end);
-
-	self:ButtonProperties();
+	
 	self:SetAttributes();
+	self:ButtonProperties();
+	
 	if LBF and self.bar.root.LBFGroup then
 		self.button.LBFButtonData = {
 			Button = self.button,
@@ -89,7 +90,6 @@ end
 function Klappa2.PopUpButton.prototype:SetAttributes()
 	SecureHandlerWrapScript(self.button,"OnEnter",self.parent.header, [[
 		control:Run(show);
-		--print("enter pop")
 		]]);
 	--SetUpAnimation(self.button, self.button:Hide(),nil,0.3,nil,nil)
 	-- SecureHandlerWrapScript(self.button,"OnLeave",self.parent.header, [[
@@ -115,6 +115,9 @@ function Klappa2.PopUpButton.prototype:SetAttributes()
 	-- self.parent.header:SetAttribute("_ontimer", [[
 			-- print("in Timer_Header")
 			-- control:Run(close)]]);
+	self.button:Execute( [[hide = [=[
+				self:Hide()
+		]=] ]])
 		
 	SecureHandlerWrapScript(self.button,"OnLeave",self.parent.header,[[return true, ""]], [[
 		inHeader =  control:IsUnderMouse(true)
