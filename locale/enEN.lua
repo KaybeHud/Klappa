@@ -59,3 +59,5 @@ if not L then return end
 	L["Show all buttonids"] = true 
 	L["Shows all buttons with their ids"] = true
 	L["no more popup button to delete"] = true
+	L["Left Click|r to open configuration"] = true
+	L["Right Click|r to lock/unlock bars"] = true

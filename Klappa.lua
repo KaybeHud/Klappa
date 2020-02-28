@@ -7,9 +7,23 @@ local L = LibStub("AceLocale-3.0"):GetLocale("Klappa2")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("Klappa", {
     type = "launcher",
     icon = "Interface\\Icons\\INV_Weapon_ShortBlade_17",
-    OnClick = function()
-       LibStub("AceConfigDialog-3.0"):Open("Klappa")
-    end,
+    OnClick = function(self, button)
+		if (button == "RightButton") then
+			for idx, bar in pairs(Klappa2.bars) do
+				bar:ToggleLock()
+			end
+		else
+			LibStub("AceConfigDialog-3.0"):Open("Klappa")
+		end
+	end,
+	OnTooltipShow = function(Tip)
+		if not Tip or not Tip.AddLine then
+			return
+		end
+		Tip:AddLine("Klappa")
+		Tip:AddLine("|cFFff4040"..L["Left Click|r to open configuration"], 1, 1, 1)
+		Tip:AddLine("|cFFff4040"..L["Right Click|r to lock/unlock bars"], 1, 1, 1)
+	end,
 })
 --------------------------------------
 
@@ -83,7 +97,7 @@ end
 
 function Klappa2:InitOptions()
 	local options = {
-		name = "Klappa 2",
+		name = "Klappa",
 		desc = "Action bars with popup buttons",
 		icon = "Interface\\Icons\\INV_Weapon_ShortBlade_17",
 		type="group", 	
