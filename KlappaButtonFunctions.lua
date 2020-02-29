@@ -276,6 +276,7 @@ function Klappa2.PopUpButton.prototype:RegisterButtonEvents()
 	self.button:RegisterEvent("STOP_AUTOREPEAT_SPELL");
 	self.button:RegisterEvent("ACTIONBAR_SLOT_CHANGED");
 	self.button:RegisterEvent("SPELL_UPDATE_ICON");
+	self.button:RegisterEvent("BAG_UPDATE");
 	self.eventsregistered = true;
 end
 
@@ -296,6 +297,7 @@ function Klappa2.PopUpButton.prototype:UnregisterButtonEvents()
 	self.button:UnregisterEvent("STOP_AUTOREPEAT_SPELL");
 	self.button:UnregisterEvent("ACTIONBAR_SLOT_CHANGED");
 	self.button:UnregisterEvent("SPELL_UPDATE_ICON");
+	self.button:UnregisterEvent("BAG_UPDATE");
 	self.eventsregistered = nil;
 end
 
@@ -362,7 +364,7 @@ function Klappa2.PopUpButton.prototype:ButtonEventHandler(event, arg)
 	if ( event == "ACTIONBAR_SLOT_CHANGED" ) then
 		--print("slotChanged")
 		if ( arg == 0 or arg == self.button.id ) then
-			print("slotChanged-UpdateButton")
+			--print("slotChanged-UpdateButton")
 			self:UpdateButton();
 		end
 		return;
@@ -400,6 +402,8 @@ function Klappa2.PopUpButton.prototype:ButtonEventHandler(event, arg)
 		if ( self:IsFlashing() and not IsAttackAction(self.button.id) ) then
 			self:StopFlash();
 		end
+	elseif (event == "BAG_UPDATE") then
+		self:UpdateCount();
 	end
 end
 -------------------------------------------------------------------------------------------------------------------------
