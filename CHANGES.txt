@@ -1,0 +1,3 @@
+----------------------
+- set scale after reload
+- some smaler fixes

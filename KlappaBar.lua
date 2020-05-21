@@ -60,6 +60,7 @@ function Klappa2.Bar.prototype:CreateBar()
 	
 	self.root:SetWidth(config[self.index].size);
 	self.root:SetHeight(config[self.index].size);
+	self.root:SetScale(config[self.index].buttonScale)
 ---
 --Um die Bar zu sehen:
 	-- self.root:SetBackdrop({
@@ -77,7 +78,8 @@ function Klappa2.Bar.prototype:CreateBar()
 	self.root.texture:SetTexture(0,0,0.5,0);
 	self.root.texture:SetAllPoints(self.root);
 	
-	--Rahmen um die Bar zum verschieben
+	
+	--Rahmen um die Bar zu verschieben
 	self.overlay = CreateFrame("Button", name .. "Overlay", self.root)
 	self.overlay:SetPoint("CENTER", self.root, "CENTER")
 	self.overlay:SetFrameLevel(self.root:GetFrameLevel()+20)

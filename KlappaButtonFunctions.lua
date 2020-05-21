@@ -465,8 +465,10 @@ end
 
 function Klappa2.PopUpButton.prototype:ShowGrid()
 	self.showgrid = self.showgrid+1;
-	self.button.normalTexture:Show();
-	self.button:Show();
+	if not InCombatLockdown() then
+		self.button.normalTexture:Show();
+		self.button:Show();
+	end
 end
 
 function Klappa2.PopUpButton.prototype:HideGrid()
@@ -477,9 +479,10 @@ function Klappa2.PopUpButton.prototype:HideGrid()
 		--	self.button:Hide();
 		--end
 	--end
-
-	if not (self.isMain) then
-		self.button:Hide();
+	if not InCombatLockdown() then
+		if not (self.isMain) then
+			self.button:Hide();
+		end
 	end
 	--if(self.isPopup and not HasAction(self.button.id)) then
 	--	self.button:SetAttribute("showstates", "!*");

@@ -1,1 +1,4 @@
 package-as: Klappa
+manual-changelog: CHANGES.txt
+required-dependencies: [Ace3]
+optional-dependencies: [Masque]

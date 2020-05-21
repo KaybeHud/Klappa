@@ -152,7 +152,7 @@ end
 function Klappa2.PopUpButton.prototype:RemoveButtonFromMasque(button)
 	if MSQ then
 		if myGroup then
-			myGroup:RemovedButton(button)		
+			myGroup:RemoveButton(button)		
 		end
 	end
 end
