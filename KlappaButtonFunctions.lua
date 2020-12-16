@@ -110,6 +110,11 @@ function Klappa2.PopUpButton.prototype:UpdateUsable()
 	local icon = self.button.icon;
 	local normalTexture = self.button.normalTexture;
 	local isUsable, notEnoughMana = IsUsableAction(self.button.id);
+	-- if(self.outOfRange) then
+	-- 	--print("outofrange")
+	-- 	icon:SetVertexColor(1.0, 0.0, 0.0);
+	-- 	normalTexture:SetVertexColor(1.0, 0.0, 0.0);
+	-- end
 	if (isUsable) then
 		icon:SetVertexColor(1.0, 1.0, 1.0);
 		normalTexture:SetVertexColor(1.0, 1.0, 1.0);
@@ -120,9 +125,7 @@ function Klappa2.PopUpButton.prototype:UpdateUsable()
 		icon:SetVertexColor(0.4, 0.4, 0.4);
 		normalTexture:SetVertexColor(1.0, 1.0, 1.0);
 	end
-	if(self.outOfRange) then
-		icon:SetVertexColor(1.0, 0.0, 0.0);
-	end
+	
 end
 
 function Klappa2.PopUpButton.prototype:UpdateFlash()
@@ -132,6 +135,10 @@ function Klappa2.PopUpButton.prototype:UpdateFlash()
 	else
 		self:StopFlash();
 	end
+
+end
+
+function Klappa2.PopUpButton.prototype:UpdateRangeIndicator()
 
 end
 
@@ -233,24 +240,32 @@ function Klappa2.PopUpButton.prototype:OnUpdate(arg1, elapsed)
 		if ( self.rangeTimer <= 0 ) then
 			local hotkey = self.button.hotkey;
 			local valid = IsActionInRange( self.button.id);
+			local checksRange = (valid ~= nil);
+			local inRange = checksRange and valid;
+			local icon = self.button.icon;
+			local normalTexture = self.button.normalTexture;
 			if(hotkey:GetText() == RANGE_INDICATOR ) then
-				if ( valid == 0 ) then
+				if checksRange then
 					hotkey:Show();
-					hotkey:SetVertexColor(1.0, 0.1, 0.1);
-				elseif( valid == 1 ) then
-					hotkey:Show();
-					hotkey:SetVertexColor(0.6, 0.6, 0.6);
+					if ( inRange ) then
+						hotkey:SetVertexColor(0.6, 0.6, 0.6);
+					else 
+						hotkey:SetVertexColor(1.0, 0.1, 0.1);
+					end
 				else
 					hotkey:Hide();
 				end
+					
 			else
-				if ( valid == 0 ) then
+				if ( checksRange and not inRange ) then 
 					hotkey:SetVertexColor(1.0, 0.1, 0.1);
+					icon:SetVertexColor(1.0, 0.0, 0.0);
+					normalTexture:SetVertexColor(1.0, 0.0, 0.0);
 				else
 					hotkey:SetVertexColor(0.6, 0.6, 0.6);
 				end
 			end
-			self.outOfRange = (valid == 0);
+			self.outOfRange = checksRange and not inRange
 			self:UpdateUsable();
 			self.rangeTimer = TOOLTIP_UPDATE_TIME;
 		end
