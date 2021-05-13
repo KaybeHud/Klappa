@@ -88,6 +88,7 @@ function Klappa2.Header.prototype:CreateHeader()
 	self.header.class = self;
 	self.header.index = self.index;
 
+	self.header:EnableMouse(false) -- macht das Frame click through fähig
 	self:SetAttributes();
 end
 
@@ -100,6 +101,7 @@ function Klappa2.Header.prototype:SetAttributes()
 			isDel = button:GetAttribute("deleted")
 			if not (isDel) then
 				button:Show()
+				--button:EnableMouse(true)
 			end
 		end
 	]=] ]])
@@ -109,6 +111,7 @@ function Klappa2.Header.prototype:SetAttributes()
 			for i, button in ipairs(popups) do
 				if not (i == 1) then
 					button:Hide()
+					--button:EnableMouse(false)
 				end
 			end
 		]=] ]])
