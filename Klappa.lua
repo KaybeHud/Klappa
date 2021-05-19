@@ -254,7 +254,7 @@ function Klappa2:CreateShowIDs()
 	Klappa2.showIDs:SetWidth(12*buttonsize);
 
 	--Rahmen um das Fenster zu verschieben
-	Klappa2.handle = CreateFrame("Button", "ShowIdHandle", Klappa2.showIDs)
+	Klappa2.handle = CreateFrame("Button", "ShowIdHandle", Klappa2.showIDs, BackdropTemplateMixin and "BackdropTemplate")
 	Klappa2.handle:SetPoint("TOPLEFT", Klappa2.showIDs, "TOPLEFT")
 	Klappa2.handle:SetFrameLevel(Klappa2.showIDs:GetFrameLevel()+20)
 	Klappa2.handle:SetWidth(12*buttonsize);

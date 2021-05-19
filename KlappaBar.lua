@@ -80,7 +80,7 @@ function Klappa2.Bar.prototype:CreateBar()
 	
 	
 	--Rahmen um die Bar zu verschieben
-	self.overlay = CreateFrame("Button", name .. "Overlay", self.root)
+	self.overlay = CreateFrame("Button", name .. "Overlay", self.root, BackdropTemplateMixin and "BackdropTemplate")
 	self.overlay:SetPoint("CENTER", self.root, "CENTER")
 	self.overlay:SetFrameLevel(self.root:GetFrameLevel()+20)
 	--10Pkte größer als die Leiste

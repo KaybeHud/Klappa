@@ -14,7 +14,7 @@ function Klappa2.PopUpButton.prototype:ApplyStyle()
 	if LBF and self.bar.root.LBFGroup then
 		self.bar.root.LBFGroup:Skin(Klappa2.config.bars[self.barid].skin.ID, Klappa2.config.bars[self.barid].skin.Gloss, Klappa2.config.bars[self.barid].skin.Backdrop, Klappa2.config.bars[self.barid].skin.Colors)
 	else
-		local header = CreateFrame("Frame", self.button:GetName().."DL", self.button);
+		local header = CreateFrame("Frame", self.button:GetName().."DL", self.button, BackdropTemplateMixin and "BackdropTemplate");
 		header:SetBackdrop({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 1, edgeFile = "", edgeSize = 0, insets = {left = 0, right = 0, top = 0, bottom = 0},});
 		header:SetBackdropColor(0, 0, 0, 0.6);
 		header:SetAllPoints(self.button);

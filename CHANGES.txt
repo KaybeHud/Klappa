@@ -1,2 +1,3 @@
 ----------------------
-latest version for WoW classic (era)
+- fixes for TBC
+- update supported TBC Version
