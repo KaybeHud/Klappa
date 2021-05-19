@@ -1,3 +1,2 @@
 ----------------------
-- Update to new WoW version
-- hidden popups are now click-through
+latest version for WoW classic (era)
